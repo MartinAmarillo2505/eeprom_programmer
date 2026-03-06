@@ -1,12 +1,6 @@
 #include "eeprom.h"
 
-void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-  initEEPROM();
-
-  Serial.begin(115200);
-  while (!Serial) {}  // wait for serial port to open
-
+void eraseEEPROM() {
   Serial.print(F("Erasing EEPROM"));
   for (int address = 0; address < 2048; address++) {
     digitalWrite(LED_BUILTIN, HIGH);
@@ -18,10 +12,9 @@ void setup() {
     }
   }
   Serial.println(F(" OK"));
+}
 
-  delay(1000);
-
-  Serial.println(F("Reading EEPROM contents"));
+void printContents() {
   for (int base = 0; base < 128; base++) {
     uint8_t data[16];
     readChunkEEPROM(base, data, sizeof(data));
@@ -33,6 +26,21 @@ void setup() {
 
     Serial.println(msg);
   }
+}
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  initEEPROM();
+
+  Serial.begin(115200);
+  while (!Serial) {}  // wait for serial port to open
+
+  eraseEEPROM();
+
+  delay(1000);
+
+  Serial.println(F("Reading EEPROM contents"));
+  printContents();
 }
 
 void loop() {
