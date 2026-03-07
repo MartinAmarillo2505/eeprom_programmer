@@ -26,6 +26,7 @@
 /*
 * Acknowledge the previous packet. Only used as a response.
 * If not sent, the previous packet will be resent by the host.
+* Should be sent when the previous packet was successfully processed
 *
 * Response payload format: <command> <length> <checksum>
 *  - <command>: Previous packet command (1 byte)
@@ -59,6 +60,7 @@
 
 /*
  * Error packet. Only used as a response when an error occurs.
+ * Should be sent instead of ACK if an error occurs
  * 
  * Response payload format: <code> <length> <data>
  *  - <error code>: Error code (1 byte)

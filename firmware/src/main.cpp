@@ -121,9 +121,6 @@ void loop() {
   }
   if (Serial.read() != PACKET_FOOTER) return;
 
-  // Acknowledge the packet
-  sendAck(command, payloadLength, checksum);
-
   // Process the command
   if (command == PACKET_COMMAND_READ) {
     if (payloadLength != 3) {
@@ -137,11 +134,15 @@ void loop() {
       sendError(PACKET_ERROR_INVALID_LENGTH, NULL, 0);
       return;
     }
+    sendAck(command, payloadLength, checksum);
+
     uint8_t data[readLength];
     readChunkEEPROM(address, data, readLength);
     sendPacket(PACKET_COMMAND_READ, data, readLength);
   } else if (command == PACKET_COMMAND_WRITE) {
     uint16_t address = payload[0] << 8 | payload[1];
+    sendAck(command, payloadLength, checksum);
+
     writeChunkEEPROM(address, &payload[2], payloadLength - 2);
     sendPacket(PACKET_COMMAND_WRITE, NULL, 0);
   } else {
