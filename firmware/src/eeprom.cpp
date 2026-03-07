@@ -68,7 +68,7 @@ void writeChunkEEPROM(uint16_t address, uint8_t *buf, size_t length) {
   setDataPinsMode(OUTPUT);
 
   for (size_t i = 0; i < length; i++) {
-    setAddress(address);
+    setAddress(address + i);
     writeDataPins(buf[i]);
 
     digitalWrite(EEPROM_WR_EN, LOW);
