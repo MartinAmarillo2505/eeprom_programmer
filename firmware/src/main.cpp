@@ -92,7 +92,11 @@ void loop() {
   }
 
   // Wait for the entire payload to arrive
-  delay(2);
+
+  for (int i = 0; i < 5; i++) {
+    if (Serial.available() >= payloadLength + 2) break;
+    delay(10);
+  }
 
   // 4. Read the payload and calculate the checksum locally
   uint8_t payload[payloadLength];
