@@ -91,23 +91,24 @@ void loop() {
     return;
   }
 
-  // Wait for the entire payload to arrive
-
-  for (int i = 0; i < 5; i++) {
-    if (Serial.available() >= payloadLength + 2) break;
-    delay(10);
-  }
-
   // 4. Read the payload and calculate the checksum locally
   uint8_t payload[payloadLength];
   uint8_t localChecksum = 0;
+  uint32_t startTime = millis();
+
   for (int i = 0; i < payloadLength; i++) {
+    while (!Serial.available()) {
+      if (millis() - startTime > 100) return;
+    }
     payload[i] = Serial.read();
     localChecksum += payload[i];
   }
   localChecksum = ~localChecksum + 1;
 
   // 5. Read the checksum and verify it
+  while (!Serial.available()) {
+    if (millis() - startTime > 100) return;
+  }
   uint8_t checksum = Serial.read();
   if (checksum != localChecksum) {
     sendError(PACKET_ERROR_CHECKSUM_MISMATCH, NULL, 0);
@@ -115,6 +116,9 @@ void loop() {
   }
 
   // 6. Check packet footer (0xFF)
+  while (!Serial.available()) {
+    if (millis() - startTime > 100) return;
+  }
   if (Serial.read() != PACKET_FOOTER) return;
 
   // Acknowledge the packet
