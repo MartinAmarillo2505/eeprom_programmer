@@ -21,7 +21,7 @@ def dump_eeprom(programmer: EEPROMProgrammer, start_address: int, size: int):
       data = [None] * left_padding + data + [None] * right_padding
 
     data = [f"{x:02x}" if x is not None else "··" for x in data]
-    print(f"{base_address:03x}: {' '.join(data[:8])}  {' '.join(data[8:])}")
+    print(f"{base_address << 4:03x}: {' '.join(data[:8])}  {' '.join(data[8:])}")
 
 
 def read_eeprom(
