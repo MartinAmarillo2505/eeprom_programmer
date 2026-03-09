@@ -1,0 +1,44 @@
+name: Package CLI application
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Create Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          spec: "cli/__main__.py"
+          requirements: "cli/requirements.txt"
+          python_ver: "3.10"
+          python_arch: "x64"
+          exe_path: "./dist/windows"
+          upload_exe_with_name: "eeprom_programmer"
+          options: --onefile
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/windows/**
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          spec: "cli/__main__.py"
+          requirements: "cli/requirements.txt"
+          python_ver: "3.10"
+          python_arch: "x64"
+          exe_path: "./dist/linux"
+          upload_exe_with_name: "eeprom_programmer"
+          options: --onefile
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/linux/**
