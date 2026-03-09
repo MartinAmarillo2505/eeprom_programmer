@@ -56,11 +56,14 @@ def write_eeprom(
   no_verify: bool,
 ):
   address = start_address
+
+  print(f"Writing {file.name} to 0x{address:03x}", end="", flush=True)
   while True:
     chunk = file.read(block_size)
     if not chunk:
       break
     programmer.write(address, chunk)
+    print(".", end="", flush=True)
 
     if not no_verify:
       time.sleep(0.1)
