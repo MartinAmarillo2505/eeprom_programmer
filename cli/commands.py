@@ -1,3 +1,4 @@
+import time
 from protocol import EEPROMProgrammer
 from io import BufferedReader, BufferedWriter
 
@@ -45,11 +46,6 @@ def read_eeprom(
     file.write(programmer.read((start_address + size) - left, left))
 
   print(" done")
-
-
-from io import BufferedReader
-import time
-from protocol import EEPROMProgrammer
 
 
 def write_eeprom(
