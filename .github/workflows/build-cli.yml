@@ -17,10 +17,12 @@ jobs:
           python_ver: "3.10"
           python_arch: "x64"
           exe_path: "./dist/windows"
-          upload_exe_with_name: "eeprom_programmer"
+          upload_exe_with_name: "eeprom_programmer-win"
           options: --onefile
+      - name: Rename Executable
+        run: mv dist/windows/__main__.exe dist/windows/eeprom_programmer.exe
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/windows/**
@@ -35,10 +37,12 @@ jobs:
           python_ver: "3.10"
           python_arch: "x64"
           exe_path: "./dist/linux"
-          upload_exe_with_name: "eeprom_programmer"
+          upload_exe_with_name: "eeprom_programmer-linux"
           options: --onefile
+      - name: Rename Executable
+        run: mv dist/linux/__main__ dist/linux/eeprom_programmer
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             dist/linux/**
