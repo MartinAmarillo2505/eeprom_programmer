@@ -4,6 +4,7 @@ import time
 from serial import Serial
 import serial.tools.list_ports
 
+from commands import dump_eeprom, read_eeprom, write_eeprom
 from protocol import EEPROMProgrammer
 
 BAUDRATE = 115200
@@ -83,3 +84,30 @@ if __name__ == "__main__":
     if len(port_names) == 0:
       sys.exit(1)
     args.port = port_names[0]
+
+  with Serial(port=args.port, baudrate=args.speed, timeout=5) as ser:
+    programmer = EEPROMProgrammer(ser)
+
+    print(f"Connected to {ser.port} at {ser.baudrate}")
+    time.sleep(1)
+
+    if args.command == "dump":
+      dump_eeprom(programmer, start_address=args.address, size=args.size)
+    elif args.command == "read":
+      read_eeprom(
+        programmer,
+        file=args.file,
+        start_address=args.address,
+        size=args.size,
+        block_size=args.block_size,
+      )
+    elif args.command == "write":
+      write_eeprom(
+        programmer,
+        file=args.file,
+        start_address=args.address,
+        block_size=args.block_size,
+        no_verify=args.no_verify,
+      )
+    else:
+      raise Exception("Unknown command. Try --help for a list of commands.")
