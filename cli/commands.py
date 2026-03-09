@@ -31,7 +31,7 @@ def read_eeprom(
   block_size: int,
 ):
   print(
-    f"Reading {size} bytes from 0x{start_address:03x} to 0x{start_address + size:03x}",
+    f"Reading {size} bytes from 0x{start_address:03x} to 0x{start_address + size - 1:03x}",
     end="",
     flush=True,
   )
