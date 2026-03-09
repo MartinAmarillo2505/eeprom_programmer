@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
   read = subparsers.add_parser("read", help="copy EEPROM to file")
   read.add_argument(
-    "-block-size", type=int, default=auto_int, help="block size (default: 64)"
+    "-block-size", type=auto_int, default=64, help="block size (default: 64)"
   )
   read.add_argument("file", type=argparse.FileType("wb"), help="file to write to")
   read.add_argument(
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     help="do not verify written data (default: False)",
   )
   write.add_argument(
-    "-block-size", type=int, default=64, help="block size (default: 64)"
+    "-block-size", type=auto_int, default=64, help="block size (default: 64)"
   )
   write.add_argument("file", type=argparse.FileType("rb"), help="file to read from")
   write.add_argument(
