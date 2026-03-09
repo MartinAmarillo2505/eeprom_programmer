@@ -10,6 +10,9 @@ def dump_eeprom(programmer: EEPROMProgrammer, start_address: int, size: int):
     address = max(base_address << 4, start_address)
     length = min((base_address + 1) << 4, end_address) - address
 
+    if length == 0:
+      continue
+
     data = list(programmer.read(address, length))
     if length < 16:
       left_padding = max(start_address - (base_address << 4), 0)
