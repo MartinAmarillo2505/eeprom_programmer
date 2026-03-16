@@ -4,8 +4,8 @@ from io import BufferedReader, BufferedWriter
 
 
 def dump_eeprom(programmer: EEPROMProgrammer, start_address: int, size: int):
-  end_address = min(start_address + size, 2048)
-  end_base = min((end_address >> 4) + 1, 2048 >> 4)
+  end_address = start_address + size
+  end_base = (end_address >> 4) + 1
 
   for base_address in range(start_address >> 4, end_base):
     address = max(base_address << 4, start_address)
