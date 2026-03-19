@@ -65,14 +65,22 @@ def write_eeprom(
     programmer.write(address, chunk)
     print(".", end="", flush=True)
 
-    if not no_verify:
-      time.sleep(0.1)
-
-      written = programmer.read(address, len(chunk))
-      time.sleep(0.1)
-      for i in range(len(chunk)):
-        if written[i] != chunk[i]:
-          print(f"Correcting write error at {address + i}")
-          programmer.write(address + i, chunk[i].to_bytes(1, "big"))
-
     address += len(chunk)
+
+  if no_verify:
+    return
+
+  file.seek(0)
+  print()
+  print("Verifying", end="", flush=True)
+  while True:
+    chunk = file.read(block_size)
+    if not chunk:
+      break
+    written = programmer.read(address, len(chunk))
+    if written != chunk:
+      raise Exception(f"Verification error at 0x{address:03x}")
+    print(".", end="", flush=True)
+    address += len(chunk)
+
+  print(" done")
