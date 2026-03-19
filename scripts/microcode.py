@@ -27,8 +27,8 @@ FI = 0b00000000_00000100_00000000  # Flag register in
 UCODE_TEMPLATE = (
   (CO | MI, RO | II | CE, SR),  # 0000 - NOP
   (CO | MI, RO | II | CE, IO | MI, RO | AI, SR),  # 0001 - LDA
-  (CO | MI, RO | II | CE, IO | MI, RO | BI, EO | AI, SR),  # 0010 - ADD
-  (CO | MI, RO | II | CE, IO | MI, RO | BI, EO | AI | SUB, SR),  # 0011 - SUB
+  (CO | MI, RO | II | CE, IO | MI, RO | BI, EO | AI | FI, SR),  # 0010 - ADD
+  (CO | MI, RO | II | CE, IO | MI, RO | BI, EO | AI | SUB | FI, SR),  # 0011 - SUB
   (CO | MI, RO | II | CE, IO | MI, AO | RI, SR),  # 0100 - STA
   (CO | MI, RO | II | CE, IO | AI, SR),  # 0101 - LDI
   (CO | MI, RO | II | CE, IO | JMP, SR),  # 0110 - JMP
