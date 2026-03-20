@@ -32,9 +32,9 @@ UCODE_TEMPLATE = (
   (CO | MI, RO | II | CE, IO | MI, AO | RI, SR),  # 0100 - STA
   (CO | MI, RO | II | CE, IO | AI, SR),  # 0101 - LDI
   (CO | MI, RO | II | CE, IO | JMP, SR),  # 0110 - JMP
-  (CO | MI, RO | II | CE, SR),  # 0111
-  (CO | MI, RO | II | CE, SR),  # 1000
-  (CO | MI, RO | II | CE, SR),  # 1001
+  (CO | MI, RO | II | CE, SR, SR),  # 0111 - BEQ
+  (CO | MI, RO | II | CE, SR, SR),  # 1000 - BNE
+  (CO | MI, RO | II | CE, SR, SR),  # 1001 - JC
   (CO | MI, RO | II | CE, SR),  # 1010
   (CO | MI, RO | II | CE, SR),  # 1011
   (CO | MI, RO | II | CE, SR),  # 1100
@@ -52,7 +52,14 @@ def get_microstep(address: int):
 
   microsteps = UCODE_TEMPLATE[opcode]
   try:
-    return microsteps[step]
+    if opcode == 0b0111 and step == 2 and zero_flag == 1:  # BEQ
+      return IO | JMP
+    elif opcode == 0b1000 and step == 2 and zero_flag == 0:  # BNE
+      return IO | JMP
+    elif opcode == 0b1001 and step == 2 and carry_flag == 1:  # JC
+      return IO | JMP
+    else:
+      return microsteps[step]
   except IndexError:
     return 0
 
