@@ -72,6 +72,19 @@ def write_eeprom(
 
   file.seek(0)
   print()
+  time.sleep(1)
+  verify_eeprom(programmer, file, start_address, block_size, True)
+
+
+def verify_eeprom(
+  programmer: EEPROMProgrammer,
+  file: BufferedReader,
+  start_address: int,
+  block_size: int,
+  fix: bool,
+):
+  address = start_address
+
   print("Verifying", end="", flush=True)
   while True:
     chunk = file.read(block_size)
@@ -79,7 +92,15 @@ def write_eeprom(
       break
     written = programmer.read(address, len(chunk))
     if written != chunk:
-      raise Exception(f"Verification error at 0x{address:03x}")
+      if not fix:
+        raise Exception(f"Verification error at 0x{address:03x}")
+      print(f"\nVerification failed at 0x{address:03x}. Fixing", flush=True)
+      time.sleep(0.1)
+      programmer.write(address, chunk)
+      time.sleep(0.1)
+      written = programmer.read(address, len(chunk))
+      if written != chunk:
+        raise Exception(f"Verification error at 0x{address:03x}")
     print(".", end="", flush=True)
     address += len(chunk)
 

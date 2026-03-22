@@ -4,7 +4,7 @@ import time
 from serial import Serial
 import serial.tools.list_ports
 
-from commands import dump_eeprom, read_eeprom, write_eeprom
+from commands import dump_eeprom, read_eeprom, write_eeprom, verify_eeprom
 from protocol import EEPROMProgrammer
 
 BAUDRATE = 115200
@@ -72,6 +72,22 @@ if __name__ == "__main__":
     help="start address (default: 0x000)",
   )
 
+  verify = subparsers.add_parser("verify", help="verify EEPROM data")
+  verify.add_argument(
+    "-block-size", type=auto_int, default=64, help="block size (default: 64)"
+  )
+  verify.add_argument("file", type=argparse.FileType("rb"), help="file to read from")
+  verify.add_argument(
+    "address",
+    type=auto_int,
+    nargs="?",
+    default=0,
+    help="start address (default: 0x000)",
+  )
+  verify.add_argument(
+    "fix", nargs="?", default=False, const=True, help="fix errors (default: False)"
+  )
+
   args = parser.parse_args()
 
   if "block_size" in args:
@@ -108,6 +124,14 @@ if __name__ == "__main__":
         start_address=args.address,
         block_size=args.block_size,
         no_verify=args.no_verify,
+      )
+    elif args.command == "verify":
+      verify_eeprom(
+        programmer,
+        file=args.file,
+        start_address=args.address,
+        block_size=args.block_size,
+        fix=args.fix,
       )
     else:
       raise Exception("Unknown command. Try --help for a list of commands.")
