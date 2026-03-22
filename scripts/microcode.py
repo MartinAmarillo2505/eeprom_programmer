@@ -35,7 +35,7 @@ UCODE_TEMPLATE = (
   (CO | MI, RO | II | CE, SR, SR),  # 0111 - BEQ
   (CO | MI, RO | II | CE, SR, SR),  # 1000 - BNE
   (CO | MI, RO | II | CE, SR, SR),  # 1001 - JC
-  (CO | MI, RO | II | CE, SR),  # 1010
+  (CO | MI, RO | II | CE, SR, SR),  # 1010 - JNC
   (CO | MI, RO | II | CE, IO | MI, RO | BI, SUB | FI | SR),  # 1011 - CMP
   (CO | MI, RO | II | CE, SR),  # 1100
   (CO | MI, RO | II | CE, SR),  # 1101
@@ -57,6 +57,8 @@ def get_microstep(address: int):
     elif opcode == 0b1000 and step == 2 and zero_flag == 0:  # BNE
       return IO | JMP
     elif opcode == 0b1001 and step == 2 and carry_flag == 1:  # JC
+      return IO | JMP
+    elif opcode == 0b1010 and step == 2 and carry_flag == 0:  # JNC
       return IO | JMP
     else:
       return microsteps[step]
