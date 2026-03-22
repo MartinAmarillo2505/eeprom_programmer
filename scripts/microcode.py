@@ -36,7 +36,7 @@ UCODE_TEMPLATE = (
   (CO | MI, RO | II | CE, SR, SR),  # 1000 - BNE
   (CO | MI, RO | II | CE, SR, SR),  # 1001 - JC
   (CO | MI, RO | II | CE, SR),  # 1010
-  (CO | MI, RO | II | CE, SR),  # 1011
+  (CO | MI, RO | II | CE, IO | MI, RO | BI, SUB | FI | SR),  # 1011 - CMP
   (CO | MI, RO | II | CE, SR),  # 1100
   (CO | MI, RO | II | CE, SR),  # 1101
   (CO | MI, RO | II | CE, AO | OI, SR),  # 1110 - OUT
