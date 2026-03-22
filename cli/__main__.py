@@ -85,7 +85,7 @@ if __name__ == "__main__":
     help="start address (default: 0x000)",
   )
   verify.add_argument(
-    "fix", nargs="?", default=False, const=True, help="fix errors (default: False)"
+    "-fix", nargs="?", default=False, const=True, help="fix errors (default: False)"
   )
 
   args = parser.parse_args()
