@@ -34,8 +34,8 @@ UCODE_TEMPLATE = (
   (CO | MI, RO | II | CE, IO | JMP, SR),  # 0110 - JMP
   (CO | MI, RO | II | CE, SR, SR),  # 0111 - BEQ
   (CO | MI, RO | II | CE, SR, SR),  # 1000 - BNE
-  (CO | MI, RO | II | CE, SR, SR),  # 1001 - JC
-  (CO | MI, RO | II | CE, SR, SR),  # 1010 - JNC
+  (CO | MI, RO | II | CE, SR, SR),  # 1001 - BCS
+  (CO | MI, RO | II | CE, SR, SR),  # 1010 - BCC
   (CO | MI, RO | II | CE, IO | MI, RO | BI, SUB | FI | SR),  # 1011 - CMP
   (CO | MI, RO | II | CE, SR),  # 1100
   (CO | MI, RO | II | CE, SR),  # 1101
