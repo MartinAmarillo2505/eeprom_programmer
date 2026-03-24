@@ -45,12 +45,20 @@ UCODE_TEMPLATE = (
 
 
 def get_microstep(address: int):
+  # Address format: [unused][z][c][opcode][step]
+  #                  14  13 12  11 10   3  2  0
+  #  - [unused]: Currently unused (2 bits)
+  #  - [z]: Zero flag (1 bit)
+  #  - [c]: Carry flag (1 bit)
+  #  - [opcode]: Instruction code (8 bits)
+  #  - [step]: Microstep (3 bits)
+
   step = address & 0x07
-  opcode = (address >> 7) & 0x0F  # TODO: use all 8 bits after memory upgrade
+  opcode = (address >> 3) & 0xFF
   carry_flag = (address >> 11) & 0x01
   zero_flag = (address >> 12) & 0x01
 
-  microsteps = UCODE_TEMPLATE[opcode]
+  microsteps = UCODE_TEMPLATE[opcode >> 4]  # TODO: use all 8 bits after memory upgrade
   try:
     if opcode == 0b0111 and step == 2 and zero_flag == 1:  # BEQ
       return IO | JMP
